@@ -2,8 +2,22 @@ package manu.tuto;
 
 public interface Partie {
 
-    void initialiserUnePartie();
+    /**
+     * Méthode utilisée au démarrage d'une partie pour
+     * <ul>
+     *     <li>Générer un code secret</li>
+     *     <li>Initialiser l'ensemble des solution possibles</li>
+     * </ul>
+     */
+    void initialiserUnePartie(Codeur codeur, Decodeur decodeur);
 
-    void jouerUnePartie ();
+    /**
+     * Méthode gérant la séquence des tours jusqu'à la fin de la partie
+     *<ul>
+     *     <li>Le décodeur fait une proposition</li>
+     *     <li>Le codeur évalue cette proposition par rapport à son code secret</li>
+     * </ul>
+     */
+    void jouerUnePartie (Codeur codeur, Decodeur decodeur);
 
 }

@@ -55,29 +55,7 @@ public class CodeSecret {
         this.setCodeTableau(unCodeSecret);
     }
 
-    public void afficherCodeSecret (CodeSecret codeSecret) {
- //       param = new ParametresDuJeu();
-        if (ParametresDuJeu.MODE_DEV) {
-            System.out.println("!!!!!! mode développeur - code = '" + codeSecret.getCodeTableau() + "' !!!!!!");  //TODO Bug : perte du code secret ??
-        }
-    }
 
 
-    public String evaluerProposition(String proposition, ArrayList<Character> codeSecret) {
-        String reponse = "";
-        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
-            if (proposition.charAt(i) == codeSecret.get(i))  {
-                reponse += "=";
-            }else {
-                if (proposition.charAt(i) < codeSecret.get(i)){
-                    reponse += "+";
-                }else{
-                    if (proposition.charAt(i) > codeSecret.get(i)){
-                        reponse += "-";
-                    }
-                }
-            }
-        }
-        return reponse;
-    }
+
 }

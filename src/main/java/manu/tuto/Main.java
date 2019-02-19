@@ -18,7 +18,7 @@ public class Main {
             jeu.initialiserLeJeu();
             do {  //Tant que le joueur veut faire le même jeu
 
-                jeu.demarrerLeJeu();
+                jeu.lancerLeJeu();
 
                 System.out.println();
                 System.out.println("Que souhaitez-vous faire ( 1- Rejouer  2- Autre jeu   3- Quitter) ? ");
@@ -40,7 +40,7 @@ public class Main {
             } while (choix == 1);
         } while (choix == 2);
 
-        System.out.println(ParametresDuJeu.LONGUEUR_CODE_SECRET);
+  //      System.out.println(ParametresDuJeu.LONGUEUR_CODE_SECRET);
     }
 
     private static void chargementParametres(){

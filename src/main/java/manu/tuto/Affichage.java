@@ -15,7 +15,7 @@ public class Affichage {
 
 
     /**
-     * Display available games.
+     * Proposer les choix de jeux possibles
      */
     public int selectionnerTypeJeu() {
         System.out.println("   1- Plus-Moins");
