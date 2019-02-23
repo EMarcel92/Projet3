@@ -6,6 +6,7 @@ package manu.tuto;
  */
 public class AppTest {
 
+
 /*   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeEach
@@ -18,7 +19,7 @@ public class AppTest {
         System.setOut(System.out);
     }
 
-    Affichage affichage = new Affichage();
+
 
     @Test
     public void Given_playingMastermind_When_StartingProgram_Then_DisplayWelcome() {

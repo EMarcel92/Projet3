@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="MyConsole" class="org.apache.log4j.ConsoleAppender">
+        <param name="threshold" value="ERROR" />
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-4r %d [%t] %-5p %c %x - %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="File" class="org.apache.log4j.FileAppender">
+        <param name="File" value="logs/mastermind.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{dd MMM yyyy HH:mm:ss} {%t} %-5p %c %x - %m%n" />
+        </layout>
+    </appender>
+
+    <!-- logger name must by package name! -->
+    <logger name="manu.tuto.Main">
+        <level value="DEBUG" />
+        <appender-ref ref="File" />
+    </logger>
+
+    <!-- ROOT pour mode console - Le level ne sert à rien ? -->
+    <root>
+        <level value="WARN" />
+        <appender-ref ref="MyConsole" />
+    </root>
+
+</log4j:configuration>

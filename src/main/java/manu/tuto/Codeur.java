@@ -1,7 +1,5 @@
 package manu.tuto;
 
-import java.util.ArrayList;
-
 /**
  * Joueur (humain ou ordi) chargé de :
  * <ul>
@@ -11,35 +9,53 @@ import java.util.ArrayList;
  * </ul>
  */
 public abstract class Codeur {
-    private ArrayList<Character> codeTableau;
+//    private ArrayList<Character> codeSecret;
+    String codeSecret;
 
-    public ArrayList<Character> getCodeTableau() {
-        return codeTableau;
+    public String getCodeSecret() {
+        return codeSecret;
     }
 
-    public void setCodeTableau(ArrayList<Character> codeTableau) {
-        this.codeTableau = codeTableau;
+    public void setCodeSecret(String codeSecret) {
+        this.codeSecret = codeSecret;
     }
 
     @Override
     public String toString() {
-        String maString = "";
-        for (Character myChar : this.getCodeTableau()) {
-            maString += myChar;
-        }
-        return "Le code secret est " + maString ;
+        return "Le code secret est " + this.getCodeSecret();
     }
 
     public abstract void genererCodeSecret();
 
-    public abstract String evaluerProposition (String proposition);
-
-    public abstract boolean cEstGagne (String evaluation);
-
-    public void afficherCodeSecret () {
-        if (ParametresDuJeu.MODE_DEV) {
-            System.out.println("!!!!!! mode développeur - " + this.toString() + "' !!!!!!");
+     /**
+     * Comparer la proposition passée en paramètre par rapport au code secret
+     * @param proposition faite par le challenger
+     * @return Le résultat de l'évaluation sous forme d'une phrase en français
+     */
+    public String evaluerProposition(String proposition) {
+        String reponse = "";
+        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
+            if (proposition.charAt(i) == this.getCodeSecret().charAt(i))  {
+                reponse += "=";
+            }else {
+                if (proposition.charAt(i) < this.getCodeSecret().charAt(i)){
+                    reponse += "+";
+                }else{
+                    if (proposition.charAt(i) > this.getCodeSecret().charAt(i)){
+                        reponse += "-";
+                    }
+                }
+            }
         }
+        return reponse;
     }
 
+    /**
+     * Affichage du code secret si le jeu est lancé en <b></b>mode Développeur</b>
+     */
+    public void afficherCodeSecret () {
+        if (ParametresDuJeu.MODE_DEV) {
+            System.out.println("!!!!!! mode développeur - " + this.toString() + " !!!!!!");
+        }
+    }
 }
