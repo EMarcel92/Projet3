@@ -26,7 +26,7 @@ public class Jeu {
      * Lanceur du jeu (logiciel) : détermination de la partie (type et mode de jeu) à exécuter
      */
     public void lancerLeJeu(){
-        logger.warn("lancerLeJeu");
+        logger.debug("lancerLeJeu");
         //Intialisation des paramètres des jeux (fichier de paramétrage)
         ParametresDuJeu.intialiserLesParametres();
         bienvenue();   //Affichage d'un message d'accueil
@@ -80,36 +80,36 @@ public class Jeu {
      * Lance et déroule une partie (PlusMoins ou Mastermind) en fonction des choix précédents de l'utilisateur
      */
     public void lancerUnePartie(){
+        switch (modeJeu){
+            case CHALLENGER: //L'humain décode le code fourni par l'ordi (codeur)
+                codeur= new CodeurOrdi();
+                decodeur = new DecodeurHumain();
+                break;
+            case DEFENSEUR:  //L'humain définit un code que l'ordi doit trouver
+                codeur= new CodeurHumain();
+                decodeur = new DecodeurOrdi();
+                break;
+            case DUEL:
+
+                break;
+            default:
+                System.out.println("Le mode souhaité n'existe pas.");
+                logger.error("Valeur inatendue pour modejeu : '" + modeJeu + "'");
+                break;
+        }
         switch (typeJeu) {
             case PLUSMOINS:
                 PlusMoins plusMoins = new PlusMoins();
-                switch (modeJeu){
-                    case CHALLENGER: //L'humain attaque l'ordi
-                        codeur= new CodeurOrdi();
-                        decodeur = new DecodeurHumain();
-                        plusMoins.initialiserUnePartie(codeur, decodeur);
-                        plusMoins.jouerUnePartie(codeur, decodeur);
-                        break;
-                    case DEFENSEUR:  //L'humain définit un code que l'ordi doit trouver
-                        codeur= new CodeurHumain();
-                        decodeur = new DecodeurOrdi();
-                        plusMoins.initialiserUnePartie(codeur, decodeur);
-                        plusMoins.jouerUnePartie(codeur, decodeur);
-                        break;
-                    case DUEL:
-
-                        break;
-                    default:
-                        System.out.println("Valeur inatendue pour modejeu : '" + modeJeu + "'");  //TODO a mettre en log
-                        System.out.println("Le mode souhaité n'existe pas.");
-                        break;
-                }
+                plusMoins.initialiserUnePartie(codeur, decodeur);
+                plusMoins.jouerUnePartie(codeur, decodeur);
                 break;
             case MASTERMIND:
-                System.out.println("Le jeu 2 n'existe pas ENCORE.");
+                Mastermind mastermind = new Mastermind();
+                mastermind.initialiserUnePartie(codeur, decodeur);
+                mastermind.jouerUnePartie(codeur, decodeur);
                 break;
             default:
-                System.out.println("Valeur inatendue pour typeJeu : '" + typeJeu + "'");  //a mettre en log
+                logger.error("Valeur inatendue pour typeJeu : '" + typeJeu + "'");
                 System.out.println("Le jeu souhaité n'existe pas.");
                 break;
         }
@@ -130,7 +130,7 @@ public class Jeu {
                 typeDeJeu = sc.nextInt();
                 reponseFausse = false;
                 if (typeDeJeu != 1 && typeDeJeu != 2) {   //A modifier si la liste des jeux peut évoluer
-                    System.out.println("Vous devez saisr un des choix proposés (1 ou 2).");
+                    System.out.println("Vous devez saisir un des choix proposés (1 ou 2).");
                     reponseFausse = true;
                 }
             } catch (InputMismatchException e) {

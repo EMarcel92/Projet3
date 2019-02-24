@@ -22,4 +22,19 @@ public class Main {
         Jeu jeu = new Jeu();
         jeu.lancerLeJeu();
     }
+
+
+
+    //    public static void main( String [] args ) {
+//
+//        int accumulator = 0;
+//
+//        for( String param : args ) {
+//            accumulator += Integer.parseInt( param );
+//        }
+//
+//        System.out.println( accumulator );
+//
+//    }
+
 }

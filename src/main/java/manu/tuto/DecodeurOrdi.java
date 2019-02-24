@@ -37,8 +37,8 @@ public class DecodeurOrdi extends Decodeur{
      */
     @Override
     public String proposition(String evaluationDernierTour) {
-        // Si le resultat est null, on est dans le premier tour de jeu:
-        if (evaluationDernierTour ==null){ //cas du premier tour de la partie
+        // Si le resultat est null, on est dans le premier tour de jeu
+        if (evaluationDernierTour == null){ //cas du premier tour de la partie
             nouvelleProposition = genererPropositionAleatoirement();
         }
         else{
