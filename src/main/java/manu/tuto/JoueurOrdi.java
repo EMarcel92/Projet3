@@ -3,31 +3,35 @@ package manu.tuto;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Le décodeur (celui qui cherche le code secret) est un ordinateur
- */
-public class DecodeurOrdi extends Decodeur{
-//    char[] symboles = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};  //Utilisable si volonté d'avoir des symboles autres que 0, 1, 2...)
+public class JoueurOrdi extends Joueur{
+    //    char[] symboles = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};  //Utilisable si volonté d'avoir des symboles autres que 0, 1, 2...)
     ArrayList<String> tabSolution = new ArrayList<>();
     private StringBuilder solutionMax = new StringBuilder();
     private StringBuilder solutionMin = new StringBuilder();
     private String nouvelleProposition;
 
-    public ArrayList<String> getTabSolution() {
-        return tabSolution;
-    }
-
     /**
-     * Détermine les solutions possibles du PlusMoins sous forme de 2 bornes Min et Max
+     * Génération d'un code secret par l'ordinateur
+     * @return
      */
     @Override
-    public void initialiserSolutions(){
-        String chaine = "";
-        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
-            solutionMax.append(chaine.valueOf(ParametresDuJeu.NB_MAX_SYMBOLES-1)); // création d'une chaine avec que des symboles max
-            solutionMin.append("0");   // chaine avec des symboles min
-        }
-//        System.out.println("Initialisation des bornes :" + solutionMax +"/"+ solutionMin);
+    public String genererCodeSecret() {
+        System.out.println("l'ordi génère un code secret");
+        Random rnd = new Random();
+        String CodeSecret = "";
+        int i=0;
+        char unCar;
+        do {   // Création d'un code secret de longueur paramétrée
+            unCar = String.valueOf(rnd.nextInt(ParametresDuJeu.NB_MAX_SYMBOLES)).charAt(0);
+            CodeSecret += unCar;
+            i++;
+        }while (i < ParametresDuJeu.LONGUEUR_CODE_SECRET);
+        return CodeSecret;
+    }
+
+    @Override
+    public String proposition() {
+        return null;
     }
 
     /**
@@ -42,71 +46,52 @@ public class DecodeurOrdi extends Decodeur{
             nouvelleProposition = genererPropositionAleatoirement();
         }
         else{
-            nouvelleProposition = proposition(evaluationDernierTour, nouvelleProposition);
+            nouvelleProposition = proposition3(evaluationDernierTour);
         }
         return nouvelleProposition;
+    }
+
+    public String proposition (int evaluation) {
+        return null;
     }
 
     /**
      * Générer une proposition de solution pour le <b>PlusMoins</b> basée sur une méthode dichotomique
      * @param evaluation la dernière évaluation
-     * @param propositionPrecedente la dernière proposition
      * @return la nouvelle proposition
      */
-    protected String proposition(String evaluation,String propositionPrecedente) {
-        StringBuilder stb = new StringBuilder();
+    protected String proposition3(String evaluation) {
+        StringBuilder stb = new StringBuilder();  //,String propositionPrecedente  en2e paramètre
         for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
             switch (evaluation.charAt(i)){
                 case '+':
-                    solutionMin.setCharAt(i,(char)(propositionPrecedente.charAt(i)+1));
+                    solutionMin.setCharAt(i,(char)(this.getPropositionPrecedente().charAt(i)+1));
                     break;
                 case '-':
-                    solutionMax.setCharAt(i,(char)(propositionPrecedente.charAt(i)-1));
+                    solutionMax.setCharAt(i,(char)(this.getPropositionPrecedente().charAt(i)-1));
                     break;
                 case '=':
-                    solutionMin.setCharAt(i,propositionPrecedente.charAt(i));
-                    solutionMax.setCharAt(i,propositionPrecedente.charAt(i));
+                    solutionMin.setCharAt(i,this.getPropositionPrecedente().charAt(i));
+                    solutionMax.setCharAt(i,this.getPropositionPrecedente().charAt(i));
                     break;
                 default:
                     System.out.println("Erreur inattendue lors de la génération d'une proposition : "+ evaluation.charAt(i) +'.');
                     break;
             }
-          //  System.out.println("eval="+evaluation.charAt(i)+"min=" + solutionMin +  "max=" + solutionMax);
+            //  System.out.println("eval="+evaluation.charAt(i)+"min=" + solutionMin +  "max=" + solutionMax);
         }
-   //     System.out.println("min=" + solutionMin +  "max=" + solutionMax);
+        //     System.out.println("min=" + solutionMin +  "max=" + solutionMax);
         for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
             stb.append((char)((solutionMax.charAt(i)+solutionMin.charAt(i))/2)); //méthode dichotomique
         }
         return stb.toString();
     }
 
+
     /**
-     * Générer une proposition de solution pour le <b>Mastermind</b>
-     * @param evaluation
-     * @param propositionPrecedente
-     * @return
+     * Génération d'une première proposition totalement aléatoire
+     * @return la proposition sous forme de chaine
      */
-    protected String proposition2 (int evaluation,String propositionPrecedente){
-        Codeur codeur = new CodeurHumain();
-        String maProposition = null;
-        int n = 1;
-        for (int i = 0; i < tabSolution.size(); i++) {
-            if (codeur.evaluerProposition(tabSolution.get(i),propositionPrecedente) == evaluation){
-                if (i > n){
-                    maProposition = tabSolution.get(i);
-                    n++;
-                    break;
-
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-    * Génération d'une première proposition totalement aléatoire
-    * @return la proposition sous forme de chaine
-    */
     private String genererPropositionAleatoirement() {
         Random rnd = new Random();
         StringBuilder uneProposition = new StringBuilder();
@@ -118,6 +103,19 @@ public class DecodeurOrdi extends Decodeur{
             i++;
         }while (i < ParametresDuJeu.LONGUEUR_CODE_SECRET);
         return uneProposition.toString();
+    }
+
+    /**
+     * Détermine les solutions possibles du PlusMoins sous forme de 2 bornes Min et Max
+     */
+    @Override
+    public void initialiserSolutionsPlusMoins(){
+        String chaine = "";
+        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
+            solutionMax.append(chaine.valueOf(ParametresDuJeu.NB_MAX_SYMBOLES-1)); // création d'une chaine avec que des symboles max
+            solutionMin.append("0");   // chaine avec des symboles min
+        }
+//        System.out.println("Initialisation des bornes :" + solutionMax +"/"+ solutionMin);
     }
 
     /**
@@ -136,7 +134,7 @@ public class DecodeurOrdi extends Decodeur{
         }
     }
 
-     /**
+    /**
      * Conversion d'un nombre décimal en base b
      * @param n le nombre à convertir
      * @param b la dimension de la base cible
@@ -169,3 +167,4 @@ public class DecodeurOrdi extends Decodeur{
         return stb.toString();
     }
 }
+

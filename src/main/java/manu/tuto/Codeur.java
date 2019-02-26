@@ -27,28 +27,7 @@ public abstract class Codeur {
 
     public abstract void genererCodeSecret();
 
-     /**
-     * Comparer la proposition passée en paramètre par rapport au code secret
-     * @param proposition faite par le challenger
-     * @return Le résultat de l'évaluation sous forme d'une String (ex : '-+=+')
-     */
-    public String evaluerProposition(String proposition) {
-        String reponse = "";
-        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
-            if (proposition.charAt(i) == this.getCodeSecret().charAt(i))  {
-                reponse += "=";
-            }else {
-                if (proposition.charAt(i) < this.getCodeSecret().charAt(i)){
-                    reponse += "+";
-                }else{
-                    if (proposition.charAt(i) > this.getCodeSecret().charAt(i)){
-                        reponse += "-";
-                    }
-                }
-            }
-        }
-        return reponse;
-    }
+
 
     public int evaluerProposition (String proposition,String codeSecret){
         int r = 0; // Nombre de symboles à la bonne place

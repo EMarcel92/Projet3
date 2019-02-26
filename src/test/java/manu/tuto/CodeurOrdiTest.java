@@ -13,22 +13,22 @@ class CodeurOrdiTest {
     public void initilisation(){
     }
 
-    @Test
-    void genererCodeSecretTest() {
-        ParametresDuJeu.NB_MAX_SYMBOLES=4;
-        ParametresDuJeu.LONGUEUR_CODE_SECRET=4;
-        codeurOrdi.genererCodeSecret();
-        String  monCode = codeurOrdi.getCodeSecret();
-        assertEquals(monCode.length(),ParametresDuJeu.LONGUEUR_CODE_SECRET);
-    }
-
-    @Test
-    void evaluerTest() {
-        ParametresDuJeu.NB_MAX_SYMBOLES=4;
-        ParametresDuJeu.LONGUEUR_CODE_SECRET=4;
-        codeurOrdi.setCodeSecret("0123");
-        assertEquals("--=+",codeurOrdi.evaluerProposition("2222"));
-    }
+//    @Test
+//    void genererCodeSecretTest() {
+//        ParametresDuJeu.NB_MAX_SYMBOLES=4;
+//        ParametresDuJeu.LONGUEUR_CODE_SECRET=4;
+//        codeurOrdi.genererCodeSecret();
+//        String  monCode = codeurOrdi.getCodeSecret();
+//        assertEquals(monCode.length(),ParametresDuJeu.LONGUEUR_CODE_SECRET);
+//    }
+//
+//    @Test
+//    void evaluerTest() {
+//        ParametresDuJeu.NB_MAX_SYMBOLES=4;
+//        ParametresDuJeu.LONGUEUR_CODE_SECRET=4;
+//        codeurOrdi.setCodeSecret("0123");
+//        assertEquals("--=+",codeurOrdi.evaluerProposition("2222"));
+//    }
 
     @Test
     void evaluerPropositionTest (){

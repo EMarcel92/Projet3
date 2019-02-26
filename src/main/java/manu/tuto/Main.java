@@ -19,22 +19,26 @@ public class Main {
         logger.error("msg d'erreur");
         logger.fatal("msg d'erreur fatale");
 
+        System.out.println("Démarrage de Main");
+
+        for( String param : args ) {
+            System.out.println("Paramètre Arg=" + param + '.');
+            if (param == "modedev"){
+                ParametresDuJeu.MODE_DEV = true ;
+
+                logger.debug("Main : MODEDEV est à true");
+            }
+            logger.debug(("Main : Paramètre en argument=" +param + '.'));
+        }
         Jeu jeu = new Jeu();
         jeu.lancerLeJeu();
     }
 
 
 
-    //    public static void main( String [] args ) {
-//
-//        int accumulator = 0;
-//
-//        for( String param : args ) {
-//            accumulator += Integer.parseInt( param );
-//        }
-//
-//        System.out.println( accumulator );
-//
-//    }
+
+
+
+
 
 }

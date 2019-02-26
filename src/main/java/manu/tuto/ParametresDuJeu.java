@@ -25,7 +25,9 @@ public class ParametresDuJeu {
             System.out.println(LONGUEUR_CODE_SECRET);
             NB_MAX_SYMBOLES = nbMaxSymbolesValide(nbMaxSymboles);
             NB_MAX_ESSAIS = nbMaxMaxEssaisValide(nbMaxMaxEssais);
-            MODE_DEV = modedevValide(modedev);
+            if (MODE_DEV != true){  // S'il est à true, c'est qu'il a été initialisé par l'argument à l'appel du Main
+                MODE_DEV = modeDevValide(modedev);
+            }
             System.out.println("Paramètres validés=" + LONGUEUR_CODE_SECRET + "," + NB_MAX_SYMBOLES + "," + NB_MAX_ESSAIS + "," + MODE_DEV);
         }
         catch(Exception e){
@@ -65,7 +67,7 @@ public class ParametresDuJeu {
         return nbMaxMaxEssaisInt.intValue();
     }
 
-    private static boolean modedevValide (String nbMaxMaxEssais) {
+    private static boolean modeDevValide(String nbMaxMaxEssais) {
         Boolean modedevBooleen = true;
         try {
             modedevBooleen = new Boolean(nbMaxMaxEssais);
@@ -106,32 +108,4 @@ public class ParametresDuJeu {
     }
 
 }
- /*
-        private static void lireFichierParametres() throws IOException {
-            InputStream inputStream = null;
-            try {
-                Properties prop = new Properties();
-                String fichierProperties = "config.properties";
-                 inputStream = getClass().getClassLoader().getResourceAsStream(fichierProperties);
-                if (inputStream != null) {
-                    prop.load(inputStream);
-                } else {
-                    throw new FileNotFoundException("fichier de paramètres '" + fichierProperties + "' introuvable");
-                }
-                // get the property value and print it out
-                String longueurCodeSecret = prop.getProperty("longueurCodeSecret","4");
-                String nbMaxSymboles = prop.getProperty("nbMaxSymboles","6");
-                String nbMaxMaxEssais = prop.getProperty("nbMaxMaxEssais","12");
-                String modedev = prop.getProperty("modedev","true");
-
-                System.out.println("Paramètres=" + longueurCodeSecret + "," + nbMaxSymboles + ", " + nbMaxMaxEssais + ", " + modedev);
-            } catch (Exception e) {
-                System.out.println("Exception: " + e);
-            } finally {
-                inputStream.close();
-            }
-        }
-*/
-
-
 

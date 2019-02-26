@@ -18,6 +18,10 @@ public interface Partie {
      *     <li>Le codeur évalue cette proposition par rapport à son code secret</li>
      * </ul>
      */
-    void jouerUnePartie (Codeur codeur, Decodeur decodeur);
+//    void jouerUnePartie (Codeur codeur, Decodeur decodeur);   //TODO à supprimer
+//
+//    void jouerUnePartie(Joueur joueurHumain, Joueur joueurOrdi);
+
+    void jouerUnePartie();
 
 }

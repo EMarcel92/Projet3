@@ -1,6 +1,19 @@
 package manu.tuto;
 
 public class PlusMoins implements Partie {
+    private Joueur challenger; //todo peut-on mettre ces attributs dans l'interface Partie ?
+    private Joueur defenseur;
+    private String codeSecret;
+
+    public PlusMoins(Joueur challenger, Joueur defenseur) {
+        this.challenger = challenger;
+        this.defenseur = defenseur;
+    }
+
+//    public PlusMoins(Joueur joueurHumain, Joueur joueurOrdi) {
+//        this.joueurHumain = joueurHumain;
+//        this.joueurOrdi = joueurOrdi;
+//}
 
     /**
      * Initialiser les éléments nécessaires au démarrage d'un PlusMoins
@@ -9,31 +22,32 @@ public class PlusMoins implements Partie {
      */
     @Override
     public void initialiserUnePartie(Codeur codeur, Decodeur decodeur) {
-        codeur.genererCodeSecret();
-        codeur.afficherCodeSecret();  //Affichage de la solution si mode développeur
-        decodeur.initialiserSolutions(); // Définir les solutions possibles (pour l'ordi)
-//TODO initialiser le tableau des solutions possibles
+//        codeur.genererCodeSecret();
+//        codeur.afficherCodeSecret();  //Affichage de la solution si mode développeur
+//        decodeur.initialiserSolutions(); // Définir les solutions possibles (pour l'ordi)
     }
 
     /**
      * Déroulement d'une partie de PlusMoins
      * @see Partie
-     * @param codeur en précisant un codeur de type humain ou ordinateur
-     * @param decodeur en précisant un codeur de type humain ou ordinateur
      */
     @Override
-    public void jouerUnePartie(Codeur codeur, Decodeur decodeur) {
+    public void jouerUnePartie() {
         String evaluation = null;
         String proposition = null;
         int nbEssais = 0;
+        codeSecret = defenseur.genererCodeSecret();
+         //Affichage de la solution si mode développeur
+        System.out.println("ModeDev=" + ParametresDuJeu.MODE_DEV);
+        if (ParametresDuJeu.MODE_DEV) {
+            System.out.println("!!!!!! mode développeur - " + codeSecret + " !!!!!!");
+        }
+        challenger.initialiserSolutionsPlusMoins(); // Définir les solutions possibles (pour l'ordi)
         do {    //Boucle jusqu'à trouver la solution ou atteindre le nombre max de tentatives
-            decodeur.setPropositionPrecedente(proposition);  //
+            challenger.setPropositionPrecedente(proposition);
 
-
-
-            proposition = decodeur.proposition(evaluation);
-            evaluation = codeur.evaluerProposition(proposition);
-
+            proposition = challenger.proposition(evaluation);
+            evaluation = evaluerProposition(proposition);
 
             System.out.println("Proposition : " + proposition + " -> Réponse : " + evaluation);
             nbEssais++;
@@ -41,8 +55,31 @@ public class PlusMoins implements Partie {
         if (cEstGagne(evaluation)) {
             System.out.println("Le challenger a gagné : le code secret a été découvert en " + nbEssais + " coups.");
         }else {
-            System.out.println("Le challenger a perdu. Le code secret était : " + codeur.getCodeSecret() + ".");
+            System.out.println("Le challenger a perdu. Le code secret était : " + codeSecret + ".");
         }
+    }
+
+    /**
+     * Comparer la proposition passée en paramètre par rapport au code secret
+     * @param proposition faite par le challenger
+     * @return Le résultat de l'évaluation sous forme d'une String (ex : '-+=+')
+     */
+    public String evaluerProposition(String proposition) {
+        String reponse = "";
+        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
+            if (proposition.charAt(i) == codeSecret.charAt(i))  {
+                reponse += "=";
+            }else {
+                if (proposition.charAt(i) < codeSecret.charAt(i)){
+                    reponse += "+";
+                }else{
+                    if (proposition.charAt(i) > codeSecret.charAt(i)){
+                        reponse += "-";
+                    }
+                }
+            }
+        }
+        return reponse;
     }
 
     /**
@@ -53,4 +90,7 @@ public class PlusMoins implements Partie {
     private boolean cEstGagne (String evaluation) {
         return evaluation.matches( "^=*$"); // C'est gagné si le résultat de l'évalusation est une suite de ===
     }
+
+
+
 }
