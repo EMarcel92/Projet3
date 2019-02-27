@@ -7,26 +7,31 @@ import java.util.Scanner;
 public class Jeu {
     private int typeJeu;             //Type de jeu
     private int modeJeu;             //mode de jeu
-//    private Partie unePartie;
     private final int PLUSMOINS = 1;  //Constantes pour simplifier la lecture du code
     private final int MASTERMIND = 2;
     private final int CHALLENGER = 1;
     private final int DEFENSEUR = 2;
     private final int DUEL = 3;
-    Scanner sc = new Scanner(System.in);
-    private boolean reponseFausse = true;  //peut-on déclarer ici pour utiliser dans plusieurs méthodes ??
-    Codeur codeur;     // Déclaration d'un codeur générique (classe abstraite)
-    Decodeur decodeur; // Idem pour le décodeur
-    Joueur joueurHumain = new JoueurHumain();
-    Joueur joueurOrdi = new JoueurOrdi();
+    Scanner sc ;
+    private boolean reponseFausse ;  //peut-on déclarer ici pour utiliser dans plusieurs méthodes ??
+    Joueur joueurHumain ; // Déclaration d'un joueur humain(classe abstraite)
+    Joueur joueurOrdi ;// Idem pour le Joueur Ordinateur
 
     private static Logger logger = Logger.getLogger(Main.class);
+
+    public Jeu() {
+        this.sc = new Scanner(System.in);
+        this.reponseFausse = true;
+        this.joueurHumain = new JoueurHumain();
+        this.joueurOrdi = new JoueurOrdi();
+    }
+
 
     /**
      * Lanceur du jeu (logiciel) : détermination de la partie (type et mode de jeu) à exécuter
      */
     public void lancerLeJeu(){
-        logger.debug("Jeu : lancerLeJeu");
+        logger.debug("[Jeu] lancerLeJeu");
         //Intialisation des paramètres des jeux (fichier de paramétrage)
         ParametresDuJeu.intialiserLesParametres();
         bienvenue();   //Affichage d'un message d'accueil
@@ -79,26 +84,6 @@ public class Jeu {
      * Lance et déroule une partie (PlusMoins ou Mastermind) en fonction des choix précédents de l'utilisateur
      */
     public void lancerUnePartie(){
-//        switch (modeJeu){
-//            case CHALLENGER: //L'humain décode le code fourni par l'ordi (codeur)
-//                joueurHumain.setChallenger(true);
-//                joueurOrdi.setChallenger(false);
-//
-////                codeur= new CodeurOrdi();
-////                decodeur = new DecodeurHumain();
-//                break;
-//            case DEFENSEUR:  //L'humain définit un code que l'ordi doit trouver
-//                codeur= new CodeurHumain();
-//                decodeur = new DecodeurOrdi();
-//                break;
-//            case DUEL:
-//
-//                break;
-//            default:
-//                System.out.println("Le mode souhaité n'existe pas.");
-//                logger.error("Valeur inatendue pour modejeu : '" + modeJeu + "'");
-//                break;
-//        }
         switch (typeJeu) {
             case PLUSMOINS:
                 PlusMoins plusMoins;
@@ -109,15 +94,10 @@ public class Jeu {
                         plusMoins = new PlusMoins(joueurHumain, joueurOrdi);
                         plusMoins.jouerUnePartie();
                         break;
-//                codeur= new CodeurOrdi();
-//                decodeur = new DecodeurHumain();
                     case DEFENSEUR:  //L'humain définit un code que l'ordi doit trouver
                         plusMoins = new PlusMoins(joueurOrdi, joueurHumain);
                         plusMoins.jouerUnePartie();
                         break;
-//                        codeur= new CodeurHumain();
-//                        decodeur = new DecodeurOrdi();
-//                        break;
                     case DUEL:
 
                         break;
@@ -134,8 +114,6 @@ public class Jeu {
                         mastermind = new Mastermind(joueurHumain, joueurOrdi);
                         mastermind.jouerUnePartie();
                         break;
-//                codeur= new CodeurOrdi();
-//                decodeur = new DecodeurHumain();
                     case DEFENSEUR:  //L'humain définit un code que l'ordi doit trouver
                         mastermind = new Mastermind(joueurOrdi, joueurHumain);
                         mastermind.jouerUnePartie();

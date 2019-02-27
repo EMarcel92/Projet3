@@ -9,41 +9,45 @@ package manu.tuto;
  * </ul>
  */
 public abstract class Joueur {
-    private boolean challenger;
-    private boolean defenseur;
-    private String propositionPrecedente;  //TODO eviter de mettre en public
 
-    public String getPropositionPrecedente() {
-        return propositionPrecedente;
-    }
-
-    public void setPropositionPrecedente(String propositionPrecedente) {
-        this.propositionPrecedente = propositionPrecedente;
-    }
-
-    public boolean isChallenger() {
-        return challenger;
-    }
-
-    public void setChallenger(boolean challenger) {
-        this.challenger = challenger;
-    }
-
-    public boolean isDefenseur() {
-        return defenseur;
-    }
-
-    public void setDefenseur(boolean defenseur) {
-        this.defenseur = defenseur;
-    }
-
+    /**
+     * Créer un code secret à faire deviner à l'autre joueur
+     * @return un code secret respectant des critères (longueur, plage de symboles)
+     */
     public abstract String genererCodeSecret();
 
-    public abstract void initialiserSolutionsPlusMoins();
+    /**
+     * Définir la plage de solutions possibles pour un jeu (utilisé par un ordinateur)
+     */
+    public void initialiserSolutionsPlusMoins(){
+            }
 
-    public abstract String proposition();
+    /**
+     * Définir la plage de solutions possibles pour un jeu (utilisé par un ordinateur)
+     */
+    public void initialiserSolutionsMastermind(){
+    }
 
+    /**
+     * Faire une proposition de solution pour le PlusMoins
+     * @param evaluation
+     * @return une proposition respectant des critères (longueur, plage de symboles)
+     */
     public abstract String proposition(String evaluation);
 
+    /**
+     * Faire une proposition de solution pour le Mastermind
+     * @param evaluation
+     * @return
+     */
     public abstract String proposition(int evaluation);
+
+    /**
+     * Compare une proposition à un code et renvoie une réponse indiquant s'ils sont similaires
+     * @param proposition la proposition
+     * @param codeSecret le code de référence à laquelle il faut compoarer la proposition
+     * @return le résultat de la comparaison
+     */
+    public abstract int evaluerProposition (String proposition, String codeSecret);
+
 }

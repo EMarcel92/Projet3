@@ -1,30 +1,21 @@
 package manu.tuto;
 
 public class PlusMoins implements Partie {
-    private Joueur challenger; //todo peut-on mettre ces attributs dans l'interface Partie ?
+    private Joueur challenger;
     private Joueur defenseur;
     private String codeSecret;
+
+    public String getCodeSecret() {
+        return codeSecret;
+    }
+
+    public void setCodeSecret(String codeSecret) {
+        this.codeSecret = codeSecret;
+    }
 
     public PlusMoins(Joueur challenger, Joueur defenseur) {
         this.challenger = challenger;
         this.defenseur = defenseur;
-    }
-
-//    public PlusMoins(Joueur joueurHumain, Joueur joueurOrdi) {
-//        this.joueurHumain = joueurHumain;
-//        this.joueurOrdi = joueurOrdi;
-//}
-
-    /**
-     * Initialiser les éléments nécessaires au démarrage d'un PlusMoins
-     * @param codeur le profil du codeur
-     * @param decodeur le profil du décodeur
-     */
-    @Override
-    public void initialiserUnePartie(Codeur codeur, Decodeur decodeur) {
-//        codeur.genererCodeSecret();
-//        codeur.afficherCodeSecret();  //Affichage de la solution si mode développeur
-//        decodeur.initialiserSolutions(); // Définir les solutions possibles (pour l'ordi)
     }
 
     /**
@@ -44,7 +35,7 @@ public class PlusMoins implements Partie {
         }
         challenger.initialiserSolutionsPlusMoins(); // Définir les solutions possibles (pour l'ordi)
         do {    //Boucle jusqu'à trouver la solution ou atteindre le nombre max de tentatives
-            challenger.setPropositionPrecedente(proposition);
+            /////    challenger.setPropositionPrecedente(proposition);
 
             proposition = challenger.proposition(evaluation);
             evaluation = evaluerProposition(proposition);

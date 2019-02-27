@@ -1,104 +1,181 @@
 package manu.tuto;
 
+import org.apache.log4j.Logger;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class JoueurOrdi extends Joueur{
+public class JoueurOrdi extends Joueur {
     //    char[] symboles = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};  //Utilisable si volonté d'avoir des symboles autres que 0, 1, 2...)
-    ArrayList<String> tabSolution = new ArrayList<>();
+    private ArrayList<String> tabSolution = new ArrayList<>();
     private StringBuilder solutionMax = new StringBuilder();
     private StringBuilder solutionMin = new StringBuilder();
     private String nouvelleProposition;
+    private String propositionPrecedente;
+    private List<String> anciennesPropositions= new ArrayList<>(); //Les propostions précédentes
+    private List<Integer> anciennesEvaluations = new ArrayList<>();  // et leur évaluation associée
 
-    /**
-     * Génération d'un code secret par l'ordinateur
-     * @return
-     */
-    @Override
-    public String genererCodeSecret() {
-        System.out.println("l'ordi génère un code secret");
-        Random rnd = new Random();
-        String CodeSecret = "";
-        int i=0;
-        char unCar;
-        do {   // Création d'un code secret de longueur paramétrée
-            unCar = String.valueOf(rnd.nextInt(ParametresDuJeu.NB_MAX_SYMBOLES)).charAt(0);
-            CodeSecret += unCar;
-            i++;
-        }while (i < ParametresDuJeu.LONGUEUR_CODE_SECRET);
-        return CodeSecret;
+    private static Logger logger = Logger.getLogger(Main.class);
+
+    public void setPropositionPrecedente(String propositionPrecedente) {
+        this.propositionPrecedente = propositionPrecedente;
     }
 
-    @Override
-    public String proposition() {
-        return null;
+    public StringBuilder getSolutionMax() {
+        return solutionMax;
+    }
+
+    public StringBuilder getSolutionMin() {
+        return solutionMin;
+    }
+
+    public ArrayList<String> getTabSolution() {
+        return tabSolution;
     }
 
     /**
-     * Faire une proposition en fonction de la dernière évaluation
+     * Faire une proposition pour le <b>PlusMoins</b> basée sur une méthode dichotomique
      * @param evaluationDernierTour la dernière évaluation
      * @return la nouvelle proposition
      */
     @Override
     public String proposition(String evaluationDernierTour) {
+        logger.debug("[JoueurOrdi] proposition (String) avec en entrée " + evaluationDernierTour + '.');
         // Si le resultat est null, on est dans le premier tour de jeu
         if (evaluationDernierTour == null){ //cas du premier tour de la partie
             nouvelleProposition = genererPropositionAleatoirement();
+        }else{
+            StringBuilder stb = new StringBuilder();
+            for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
+                switch (evaluationDernierTour.charAt(i)){
+//                    case '+':
+//                        solutionMin.setCharAt(i,(char)(this.getPropositionPrecedente().charAt(i)+1));
+//                        break;
+//                    case '-':
+//                        solutionMax.setCharAt(i,(char)(this.getPropositionPrecedente().charAt(i)-1));
+//                        break;
+//                    case '=':
+//                        solutionMin.setCharAt(i,this.getPropositionPrecedente().charAt(i));
+//                        solutionMax.setCharAt(i,this.getPropositionPrecedente().charAt(i));
+//                        break;
+                        case '+':
+                        solutionMin.setCharAt(i,(char)(propositionPrecedente.charAt(i)+1));
+                        break;
+                    case '-':
+                        solutionMax.setCharAt(i,(char)(propositionPrecedente.charAt(i)-1));
+                        break;
+                    case '=':
+                        solutionMin.setCharAt(i,propositionPrecedente.charAt(i));
+                        solutionMax.setCharAt(i,propositionPrecedente.charAt(i));
+                        break;
+                    default:
+                        System.out.println("Erreur inattendue lors de la génération d'une proposition : "+ evaluationDernierTour.charAt(i) +'.');
+                        break;
+                }
+            }
+            //     System.out.println("min=" + solutionMin +  "max=" + solutionMax);
+            for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
+                stb.append((char)((solutionMax.charAt(i)+solutionMin.charAt(i))/2)); //méthode dichotomique
+            }
+            nouvelleProposition =  stb.toString();
         }
-        else{
-            nouvelleProposition = proposition3(evaluationDernierTour);
-        }
+        logger.debug("[JoueurOrdi] proposition (String) avec en sortie" + nouvelleProposition + '.');
+        propositionPrecedente=nouvelleProposition;
         return nouvelleProposition;
     }
 
-    public String proposition (int evaluation) {
-        return null;
-    }
-
     /**
-     * Générer une proposition de solution pour le <b>PlusMoins</b> basée sur une méthode dichotomique
-     * @param evaluation la dernière évaluation
-     * @return la nouvelle proposition
+     * Générer une proposition de solution pour le <b>Mastermind</b>
+     * @param evaluation La dernière évaluation
+     * @return Une nouvelle proposition
      */
-    protected String proposition3(String evaluation) {
-        StringBuilder stb = new StringBuilder();  //,String propositionPrecedente  en2e paramètre
-        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
-            switch (evaluation.charAt(i)){
-                case '+':
-                    solutionMin.setCharAt(i,(char)(this.getPropositionPrecedente().charAt(i)+1));
-                    break;
-                case '-':
-                    solutionMax.setCharAt(i,(char)(this.getPropositionPrecedente().charAt(i)-1));
-                    break;
-                case '=':
-                    solutionMin.setCharAt(i,this.getPropositionPrecedente().charAt(i));
-                    solutionMax.setCharAt(i,this.getPropositionPrecedente().charAt(i));
-                    break;
-                default:
-                    System.out.println("Erreur inattendue lors de la génération d'une proposition : "+ evaluation.charAt(i) +'.');
-                    break;
-            }
-            //  System.out.println("eval="+evaluation.charAt(i)+"min=" + solutionMin +  "max=" + solutionMax);
+    @Override
+    public String proposition (int evaluation) {
+        logger.debug("[JoueurOrdi] Proposition (int) avec en entrée :" + evaluation + '.');
+        // Si l'évaluation est à 999 , on est dans le premier tour de jeu
+        if (evaluation == 999){ //cas du premier tour de la partie
+            nouvelleProposition = genererPropositionAleatoirement();
+        }else{
+            anciennesEvaluations.add(evaluation);
+            int i = 0; //index du tableau des solutions tabSolution
+            boolean trouve;
+            do {
+                trouve = true;
+                logger.trace("[JoueurOrdi] Proposition (int). tabSolution=" + tabSolution.get(i));
+                for (int j = 0; j < anciennesPropositions.size(); j++) {  //parcourir le tableau des anciennes solutiuons
+                    logger.trace("[JoueurOrdi] Proposition (int). comparaison aux anciennes propositions : Pn=" + tabSolution.get(i) + "/P1=" + anciennesPropositions.get(j) + "/Scn=" +
+                            evaluerProposition(tabSolution.get(i), anciennesPropositions.get(j)) + "/Sci=" + anciennesEvaluations.get(j));
+                    if (evaluerProposition(tabSolution.get(i), anciennesPropositions.get(j)) != anciennesEvaluations.get(j)) {
+                            trouve = false;
+                    }
+                    i++; //tabSolution suivant
+                }
+            }while (!trouve); // tant qu'on a pas trouvé une proposition répondant aux critères
+            logger.trace("[JoueurOrdi] Proposition (int). nouvelle propal=" + tabSolution.get(i-1));
+            nouvelleProposition =tabSolution.get(i-1);
         }
-        //     System.out.println("min=" + solutionMin +  "max=" + solutionMax);
-        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
-            stb.append((char)((solutionMax.charAt(i)+solutionMin.charAt(i))/2)); //méthode dichotomique
-        }
-        return stb.toString();
+        logger.debug("[JoueurOrdi] proposition (int) avec en sortie " + evaluation + '.');
+        System.out.println("proposition : " + nouvelleProposition);
+        anciennesPropositions.add(nouvelleProposition);
+        return nouvelleProposition;
     }
 
+    /**
+     * Evaluer la proposition pour le Mastermind
+     * @param proposition La proposition du Challenger
+     * @param codeSecret le code secret du défenseur
+     * @return L'évaluation sous forme d'un nombre sur 2 chiffres XY (X symboles bien placés, Y symboles mal placés)
+     */
+    public int evaluerProposition (String proposition, String codeSecret){
+        int r = 0; // Nombre de symboles à la bonne place
+        for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) { //Calcul du nombre de Symboles à la bonne place
+            if (proposition.charAt(i) == codeSecret.charAt(i)){
+                r++;
+            }
+        }
+        int b = -r; //Nombre de Symboles qui ne sont pas à la bonne place
+        for (int i = 0; i < ParametresDuJeu.NB_MAX_SYMBOLES; i++) {  // Calcul du nombre de symboles mal placés
+            int n = 0;
+            int m = 0;
+            for (int j = 0; j < ParametresDuJeu.LONGUEUR_CODE_SECRET; j++) { //recherche des occurences de symboles dans chaque code
+                String unCar = new String();
+                unCar = unCar.valueOf(i);
+                if (codeSecret.charAt(j)==unCar.charAt(0)) n++;
+                if (proposition.charAt(j)==unCar.charAt(0)) m++;
+            }
+            //   System.out.println(i + "/" + b +"/" + n + "/" + m );
+            if (n < m) {
+                b += n;
+            }else{
+                b += m;
+            }
+        }
+        anciennesEvaluations.add(10 * r + b);
+        return 10 * r + b;
+    }
 
     /**
-     * Génération d'une première proposition totalement aléatoire
+     * Génération aléatoire d'un code secret par l'ordinateur
+     * @return Un code secret
+     */
+    @Override
+    public String genererCodeSecret() {
+        logger.debug("[JoueurOrdi] genererCodeSecret");
+        return genererPropositionAleatoirement();
+    }
+
+    /**
+     * Génération d'une proposition aléatoire
      * @return la proposition sous forme de chaine
      */
     private String genererPropositionAleatoirement() {
+        logger.debug("[JoueurOrdi] genererPropositionAleatoire");
         Random rnd = new Random();
         StringBuilder uneProposition = new StringBuilder();
         int i=0;
         char unCar;
         do {   // Création d'une proposition aléatoire de longueur paramétrée
-            unCar = String.valueOf(rnd.nextInt(ParametresDuJeu.NB_MAX_SYMBOLES)).charAt(0);  //Une valeur aléatoire entre 0 et NB_MAX8symbole-1
+            unCar = String.valueOf(rnd.nextInt(ParametresDuJeu.NB_MAX_SYMBOLES)).charAt(0);  //Une valeur aléatoire entre 0 et NB_MAXSymbole-1
             uneProposition.append(unCar);
             i++;
         }while (i < ParametresDuJeu.LONGUEUR_CODE_SECRET);
@@ -108,8 +185,9 @@ public class JoueurOrdi extends Joueur{
     /**
      * Détermine les solutions possibles du PlusMoins sous forme de 2 bornes Min et Max
      */
-    @Override
+//    @Override
     public void initialiserSolutionsPlusMoins(){
+        logger.debug("[JoueurOrdi] initialisaerSolutionsPlusMoins");
         String chaine = "";
         for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
             solutionMax.append(chaine.valueOf(ParametresDuJeu.NB_MAX_SYMBOLES-1)); // création d'une chaine avec que des symboles max
@@ -121,16 +199,16 @@ public class JoueurOrdi extends Joueur{
     /**
      * Alimente un tableau de String correspondant à l'ensemble des solutions possibles du <b>Mastermind</b>
      */
-    public void GénérerSolutionsMastermind() {
+    public void initialiserSolutionsMastermind() {
+
+        logger.debug("[JoueurOrdi] genererSolutionsMastermind");
         //Nombre de combinaisons possibles
         int tailleMaxDuTableau = (int) Math.pow(ParametresDuJeu.NB_MAX_SYMBOLES, ParametresDuJeu.LONGUEUR_CODE_SECRET);
-//        System.out.println("taille du tableau prévue" + tailleMaxDuTableau);
         String ligne="";
         for (int i = 0; i < tailleMaxDuTableau; i++) {
             ligne =  ligne.valueOf(base(i,ParametresDuJeu.NB_MAX_SYMBOLES));
             if (ligne.length()<ParametresDuJeu.LONGUEUR_CODE_SECRET) ligne = completerZeroAGauche(ligne);
             tabSolution.add(ligne);
-//            System.out.println("ligne(" + i + ")=" + ligne);
         }
     }
 
@@ -163,8 +241,9 @@ public class JoueurOrdi extends Joueur{
             stb.append("0");
         }
         stb.append(string);
-//        System.out.println("completer" + stb.toString());
+        logger.trace("[JoueurOrdi] completerZeroAGauche. En sortie : " + stb.toString() + '.');
         return stb.toString();
     }
+
 }
 

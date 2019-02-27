@@ -19,16 +19,15 @@ public class Main {
         logger.error("msg d'erreur");
         logger.fatal("msg d'erreur fatale");
 
-        System.out.println("Démarrage de Main");
+        logger.debug("[Main] Démarrage de Main");
 
         for( String param : args ) {
-            System.out.println("Paramètre Arg=" + param + '.');
+            logger.debug("[Main] Paramètre Args=" + param + '.');
             if (param == "modedev"){
                 ParametresDuJeu.MODE_DEV = true ;
 
                 logger.debug("Main : MODEDEV est à true");
             }
-            logger.debug(("Main : Paramètre en argument=" +param + '.'));
         }
         Jeu jeu = new Jeu();
         jeu.lancerLeJeu();

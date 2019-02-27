@@ -9,19 +9,15 @@ public interface Partie {
      *     <li>Initialiser l'ensemble des solution possibles</li>
      * </ul>
      */
-    void initialiserUnePartie(Codeur codeur, Decodeur decodeur);
+  //  void initialiserUnePartie(Codeur codeur, Decodeur decodeur);
 
     /**
-     * Méthode gérant la séquence des tours jusqu'à la fin de la partie
+     * Méthode gérant l'initialisation de la partie et la séquence des tours jusqu'à la fin de la partie
      *<ul>
-     *     <li>Le décodeur fait une proposition</li>
+     *     <li>Le challenger fait une proposition</li>
      *     <li>Le codeur évalue cette proposition par rapport à son code secret</li>
      * </ul>
      */
-//    void jouerUnePartie (Codeur codeur, Decodeur decodeur);   //TODO à supprimer
-//
-//    void jouerUnePartie(Joueur joueurHumain, Joueur joueurOrdi);
-
     void jouerUnePartie();
 
 }

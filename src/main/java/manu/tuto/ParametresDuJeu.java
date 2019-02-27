@@ -1,5 +1,7 @@
 package manu.tuto;
 
+import org.apache.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,6 +13,8 @@ public class ParametresDuJeu {
     public static int NB_MAX_ESSAIS;       //Nombre d'essais max possibles pour trouver la combinaison
     public static boolean MODE_DEV;  // Mode développeur permettant d'afficher de code secret avant de démarrer la partie
 
+    private static Logger logger = Logger.getLogger(Main.class);
+
     public static void intialiserLesParametres(){
         try{
             // chargement des propriétés
@@ -19,16 +23,15 @@ public class ParametresDuJeu {
             String nbMaxSymboles = prop.getProperty("nbMaxSymboles","6");
             String nbMaxMaxEssais = prop.getProperty("nbMaxMaxEssais","12");
             String modedev = prop.getProperty("modedev","true");
-            System.out.println("Paramètres récupérés du fichier=" + longueurCodeSecret + "," + nbMaxSymboles + "," + nbMaxMaxEssais + "," + modedev);
+            logger.debug("[ParametresuJeu] Paramètres récupérés du fichier=" + longueurCodeSecret + "," + nbMaxSymboles + "," + nbMaxMaxEssais + "," + modedev);
 
             LONGUEUR_CODE_SECRET = longueurCodeSecretValide(longueurCodeSecret);
-            System.out.println(LONGUEUR_CODE_SECRET);
             NB_MAX_SYMBOLES = nbMaxSymbolesValide(nbMaxSymboles);
             NB_MAX_ESSAIS = nbMaxMaxEssaisValide(nbMaxMaxEssais);
             if (MODE_DEV != true){  // S'il est à true, c'est qu'il a été initialisé par l'argument à l'appel du Main
                 MODE_DEV = modeDevValide(modedev);
             }
-            System.out.println("Paramètres validés=" + LONGUEUR_CODE_SECRET + "," + NB_MAX_SYMBOLES + "," + NB_MAX_ESSAIS + "," + MODE_DEV);
+            logger.debug("Paramètres validés=" + LONGUEUR_CODE_SECRET + "," + NB_MAX_SYMBOLES + "," + NB_MAX_ESSAIS + "," + MODE_DEV);
         }
         catch(Exception e){
             System.out.println("Exception: " + e);
@@ -39,14 +42,12 @@ public class ParametresDuJeu {
         Integer longueurCodeSecretInt = 0;
         try {
             longueurCodeSecretInt = new Integer(longueurCodeSecret);
-            System.out.println("Longueur max = " + longueurCodeSecretInt);
             if (longueurCodeSecretInt > 6){
-                System.out.println("La longueur du code secret en fichier paramètre '" + longueurCodeSecretInt + "' est trop élevée pour un cerveau humain");
-                //TODO comment arrêter le programe proprement : lancer une exception ?
+                System.out.println("La longueur du code secret en fichier paramètre '" + longueurCodeSecretInt + "' est très élevé.");
             }
         }catch (NumberFormatException e){
             System.out.println("exception : " + e);
-            System.out.println("La valeur de la longueur du code secret en paramètre n'est pas nuémrique : " + longueurCodeSecret);
+            System.out.println("La valeur de la longueur du code secret en paramètre n'est pas numérique : " + longueurCodeSecret);
         }
         return longueurCodeSecretInt.intValue();
     }
@@ -55,14 +56,12 @@ public class ParametresDuJeu {
         Integer nbMaxMaxEssaisInt = 0;
         try {
             nbMaxMaxEssaisInt = new Integer(nbMaxMaxEssais);
-            System.out.println("Nombre d'essais maximum = " + nbMaxMaxEssaisInt);
-            if (nbMaxMaxEssaisInt > 9){
-                System.out.println("Le nombre maximum d'essais en fichier paramètre '" + nbMaxMaxEssaisInt + "' est trop élevé (50 maximum)");
-                //TODO comment arrêter le programe proprement : lancer une exception ?
+            if (nbMaxMaxEssaisInt > 99){
+                System.out.println("Le nombre maximum d'essais en fichier paramètre '" + nbMaxMaxEssaisInt + "' est très élevé.");
             }
         }catch (NumberFormatException e){
             System.out.println("exception : " + e);
-            System.out.println("La valeur maximale des symboles en paramètre n'est pas numérique : " + nbMaxMaxEssais);
+            System.out.println("Le nombre d'essais en paramètre n'est pas numérique : " + nbMaxMaxEssais);
         }
         return nbMaxMaxEssaisInt.intValue();
     }
@@ -83,10 +82,8 @@ public class ParametresDuJeu {
         Integer nbMaxSymbolesInt = 0;
         try {
             nbMaxSymbolesInt = new Integer(nbMaxSymboles);
-            System.out.println("Symbole max = " + nbMaxSymbolesInt);
             if (nbMaxSymbolesInt > 9){
                 System.out.println("La valeur maximale des symboles en fichier paramètre '" + nbMaxSymbolesInt + "' est incorrecte (9 maximum)");
-                //TODO comment arrêter le programe propr ement : lancer une exception ?
             }
         }catch (NumberFormatException e){
             System.out.println("exception : " + e);
@@ -108,4 +105,3 @@ public class ParametresDuJeu {
     }
 
 }
-

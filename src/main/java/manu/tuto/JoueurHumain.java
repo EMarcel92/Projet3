@@ -3,7 +3,6 @@ package manu.tuto;
 import java.util.Scanner;
 
 public class JoueurHumain extends Joueur{
-    Scanner sc = new Scanner(System.in);
 
     /**
      * Demande au joueur de saisir un code secret (en tant que codeur)
@@ -23,14 +22,6 @@ public class JoueurHumain extends Joueur{
     }
 
     @Override
-    public void initialiserSolutionsPlusMoins() {
-    }
-
-    @Override
-    public String proposition() {
-        return null;
-    }
-
     public String proposition(String evaluation) {
         return propositionHumaine();
     }
@@ -40,7 +31,9 @@ public class JoueurHumain extends Joueur{
         return propositionHumaine();
     }
 
+
     public String propositionHumaine() {
+        Scanner sc = new Scanner(System.in);
         String uneProposition = "";
         do {        // Boucle pour obtenir la saisie d'une proposition valide
             System.out.print("proposition :");
@@ -78,6 +71,45 @@ public class JoueurHumain extends Joueur{
             monCheck =false;
         }
         //Vérification de la valeur d'un symbole
+        return monCheck;
+    }
+
+    /**
+     * Saisie d'une évaluation (correction) par le joueur humain
+     * @param proposition la proposition
+     * @param codeSecret le code de référence à laquelle il faut comparer la proposition
+     * @return le résultat de l'évaluation sur 2 chiffres
+     */
+    @Override
+    public int evaluerProposition(String proposition, String codeSecret) {
+        Scanner sc = new Scanner(System.in);
+        String uneEvaluation = "";
+        do {        // Boucle pour obtenir la saisie d'une évaluation valide
+            System.out.print("Evaluation :");
+            uneEvaluation = sc.next();
+            if (!checkEvaluationOK(uneEvaluation)) {
+                System.out.println("   Saisie incorrecte (2 chiffres attendus) ");
+            }
+        } while (checkEvaluationOK(uneEvaluation)==false);
+        return Integer.valueOf(uneEvaluation);
+    }
+
+    /**
+     * Validation de la saisie d'une évaluation
+     * @param codeEntre L'évaluation saisie
+     * @return True si le format de l'évaluation est valide
+     */
+    public boolean checkEvaluationOK(String codeEntre) {
+        boolean monCheck = true;
+        if (codeEntre.length() != 2){   //Vérification de la longueur du code
+            monCheck =false;
+        }
+        try {
+            Integer numericEntry = new Integer(codeEntre);               // Vérification de la numéricité
+            int i = numericEntry.intValue(); // conversion d'Integer en int
+        } catch (NumberFormatException e) {
+            monCheck =false;
+        }
         return monCheck;
     }
 }
