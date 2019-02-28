@@ -6,6 +6,9 @@ public class Mastermind { //implements Partie{
     private Joueur challenger;
     private Joueur defenseur;
     private String codeSecret;
+    private Joueur challenger2;
+    private Joueur defenseur2;
+    private String codeSecret2;
 
     private static Logger logger = Logger.getLogger(Main.class);
 
@@ -15,13 +18,24 @@ public class Mastermind { //implements Partie{
         this.defenseur = defenseur;
     }
 
-    public String getCodeSecret() {
-        return codeSecret;
+    public Mastermind(Joueur challenger, Joueur defenseur, Joueur challenger2, Joueur defenseur2) {
+        this.challenger = challenger;
+        this.defenseur = defenseur;
+        this.challenger2 = challenger2;
+        this.defenseur2 = defenseur2;
     }
-
-    public void setCodeSecret(String codeSecret) {
-        this.codeSecret = codeSecret;
-    }
+//
+//    public String getCodeSecret() {
+//        return codeSecret;
+//    }
+//
+//    public void setCodeSecret(String codeSecret) {
+//        this.codeSecret = codeSecret;
+//    }
+//
+//    public String getCodeSecret2() {        return codeSecret2;    }
+//
+//    public void setCodeSecret2(String codeSecret2) {        this.codeSecret2 = codeSecret2;    }
 
     /**
      * Déroulement d'une partie de Mastermind
@@ -40,12 +54,9 @@ public class Mastermind { //implements Partie{
         }
         challenger.initialiserSolutionsMastermind(); // Définir les solutions possibles (pour l'ordi)
         do {    //Boucle jusqu'à trouver la solution ou atteindre le nombre max de tentatives
-         //   challenger.setPropositionPrecedente(proposition);
-
 
             proposition = challenger.proposition(evaluation);
             evaluation = defenseur.evaluerProposition(proposition,codeSecret);
-
 
             System.out.println("Proposition : " + proposition + " -> Réponse : " + evaluation/10 + " bien placé(s) et " + evaluation%10 + " mal placé(s)");
             nbEssais++;
