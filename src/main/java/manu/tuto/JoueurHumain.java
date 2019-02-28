@@ -2,6 +2,10 @@ package manu.tuto;
 
 import java.util.Scanner;
 
+/**
+ * Joueur de Jeu humain, qui joue contre l'ordinateur en réalisant des interactions avec l'application par des saisies clavier
+ * Il peut avoir les rôles codeur et/ou décodeur
+ */
 public class JoueurHumain extends Joueur{
 
     /**
@@ -18,8 +22,7 @@ public class JoueurHumain extends Joueur{
                 System.out.println("   Saisie incorrecte");
             }
         } while (checkSaisieOK(codeSecret)==false);
-        return codeSecret;
-    }
+        return codeSecret;    }
 
     @Override
     public String proposition(String evaluation) {
@@ -61,10 +64,10 @@ public class JoueurHumain extends Joueur{
         } catch (NumberFormatException e) {
             monCheck =false;
         }
-        String chaine = "";
+        //String chaine = "";
         try {
             for (int i = 0; i < ParametresDuJeu.LONGUEUR_CODE_SECRET; i++) {
-                if (codeEntre.charAt(i) > chaine.valueOf(ParametresDuJeu.NB_MAX_SYMBOLES-1).charAt(0))
+                if (codeEntre.charAt(i) > String.valueOf(ParametresDuJeu.NB_MAX_SYMBOLES-1).charAt(0))
                     monCheck =false;
             }
         } catch (Exception e) {

@@ -4,8 +4,9 @@ package manu.tuto;
  * Joueur (humain ou ordi) chargé de :
  * <ul>
  *     <li>générer un code secret</li>
+ *     <li>initaliser les solutions possibles</li>
  *     <li>faire des proposition</li>
- *     <li>dire si la partie est gagnée</li>
+ *     <li>évaluer les propositions</li>
  * </ul>
  */
 public abstract class Joueur {
@@ -30,15 +31,15 @@ public abstract class Joueur {
 
     /**
      * Faire une proposition de solution pour le PlusMoins
-     * @param evaluation
+     * @param evaluation La dernière évaluation (Chaine de caractère)
      * @return une proposition respectant des critères (longueur, plage de symboles)
      */
     public abstract String proposition(String evaluation);
 
     /**
      * Faire une proposition de solution pour le Mastermind
-     * @param evaluation
-     * @return
+     * @param evaluation La dernière évaluation (numérique)
+     * @return Une nouvelle proposition de solution
      */
     public abstract String proposition(int evaluation);
 

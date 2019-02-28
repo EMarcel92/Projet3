@@ -10,8 +10,8 @@ class ParametresDuJeuTest {
     void intialiserLesParametresTest() {
         ParametresDuJeu.intialiserLesParametres();
         assertEquals(4,ParametresDuJeu.LONGUEUR_CODE_SECRET);
-        assertEquals(3,ParametresDuJeu.NB_MAX_ESSAIS);
-        assertEquals(3,ParametresDuJeu.NB_MAX_SYMBOLES);
+        assertEquals(10,ParametresDuJeu.NB_MAX_ESSAIS);
+        assertEquals(6,ParametresDuJeu.NB_MAX_SYMBOLES);
         assertTrue(ParametresDuJeu.MODE_DEV);
 
     }

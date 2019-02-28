@@ -4,6 +4,15 @@ import org.apache.log4j.Logger;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Jeu correspond à l'application qui permet de jouer à plusieurs types de jeu
+ *<ul>
+ *     <li>Lancement du jeu (initialisation de l&acute;application</li>
+ *     <li>Choix des options de jeu</li>
+ *     <li>Lancement d'une partie</li>
+ *     <li>Choix de rejouer ou jouer à un autre type de jeu</li>
+ *</ul>
+ */
 public class Jeu {
     private int typeJeu;             //Type de jeu
     private int modeJeu;             //mode de jeu
@@ -16,14 +25,14 @@ public class Jeu {
     private boolean reponseFausse ;  //peut-on déclarer ici pour utiliser dans plusieurs méthodes ??
     Joueur joueurHumain ; // Déclaration d'un joueur humain(classe abstraite)
     Joueur joueurOrdi ;// Idem pour le Joueur Ordinateur
+    Joueur joueurHumain2 ; // Déclaration d'un joueur humain(classe abstraite)
+    Joueur joueurOrdi2 ;// Idem pour le Joueur Ordinateur
 
     private static Logger logger = Logger.getLogger(Main.class);
 
     public Jeu() {
         this.sc = new Scanner(System.in);
         this.reponseFausse = true;
-        this.joueurHumain = new JoueurHumain();
-        this.joueurOrdi = new JoueurOrdi();
     }
 
 
@@ -84,13 +93,14 @@ public class Jeu {
      * Lance et déroule une partie (PlusMoins ou Mastermind) en fonction des choix précédents de l'utilisateur
      */
     public void lancerUnePartie(){
+        //instanciation des joueurs (réinit des variables si plusieurs parties jouées à la suite
+        this.joueurHumain = new JoueurHumain();
+        this.joueurOrdi = new JoueurOrdi();
         switch (typeJeu) {
             case PLUSMOINS:
                 PlusMoins plusMoins;
                 switch (modeJeu){
                     case CHALLENGER: //L'humain décode le code fourni par l'ordi (codeur)
-
-                        //      plusMoins.initialiserUnePartie(codeur, decodeur);
                         plusMoins = new PlusMoins(joueurHumain, joueurOrdi);
                         plusMoins.jouerUnePartie();
                         break;
@@ -99,18 +109,21 @@ public class Jeu {
                         plusMoins.jouerUnePartie();
                         break;
                     case DUEL:
-
+                        joueurHumain2=new JoueurHumain();
+                        joueurOrdi2 = new JoueurOrdi ();
+                        plusMoins = new PlusMoins(joueurHumain, joueurOrdi, joueurOrdi2, joueurHumain2);
+                        plusMoins.JouerUnDuel();
                         break;
                     default:
                         System.out.println("Le mode souhaité n'existe pas.");
-                        logger.error("Valeur inatendue pour modejeu : '" + modeJeu + "'");
+                        logger.error("Valeur inattendue pour modejeu : '" + modeJeu + "'");
                         break;
                 }
                 break;
             case MASTERMIND:
                 Mastermind mastermind;
                 switch (modeJeu){
-                    case CHALLENGER: //L'humain décode le code fourni par l'ordi (codeur)
+                    case CHALLENGER: //L'humain décode le code fourni par l'ordi
                         mastermind = new Mastermind(joueurHumain, joueurOrdi);
                         mastermind.jouerUnePartie();
                         break;
@@ -118,11 +131,11 @@ public class Jeu {
                         mastermind = new Mastermind(joueurOrdi, joueurHumain);
                         mastermind.jouerUnePartie();
                         break;
-//                        codeur= new CodeurHumain();
-//                        decodeur = new DecodeurOrdi();
-//                        break;
                     case DUEL:
-
+                        joueurHumain2=new JoueurHumain();
+                        joueurOrdi2 = new JoueurOrdi ();
+                        mastermind = new Mastermind(joueurHumain, joueurOrdi, joueurOrdi2, joueurHumain2);
+                        mastermind.jouerUnDuel();
                         break;
                     default:
                         System.out.println("Le mode souhaité n'existe pas.");
@@ -139,7 +152,6 @@ public class Jeu {
 
     /**
      * Proposer à l'utilisatuer de choisir un <b>type</b> de jeu, par exemple PlusMoins ou Mastermind
-     * @return le type de jeu sous forme d'un entier
      */
     public void selectionnerTypeJeu() {
         System.out.println("   1- Plus-Moins");
@@ -164,7 +176,6 @@ public class Jeu {
 
     /**
      * Proposer à l'utilisatuer de choisi un <b>mode</b> de jeu, c'est-à-dire une forme du jeu déjà seléctionné
-     * @return le mode de jeu sous forme d'un entier
      */
     public void
     selectionnerModeJeu() {
@@ -178,7 +189,7 @@ public class Jeu {
                 modeJeu = sc.nextInt();
                 reponseFausse = false;      // comment comparer l'entrée avec des Enum ?? faire un switch sur modeDeJeu et sélectionner un Enum ??
                 if (modeJeu != CHALLENGER && modeJeu != DEFENSEUR && modeJeu != DUEL) {   //A modifier si la liste des modes peut évoluer
-                    System.out.println("Vous devez saisr un des choix proposés (1, 2 ou 3).");
+                    System.out.println("Vous devez saisir un des choix proposés (1, 2 ou 3).");
                     reponseFausse = true;
                 }
             } catch (InputMismatchException e) {
@@ -193,8 +204,10 @@ public class Jeu {
      * Résumé des règles du jeu en fonction des choix de l'utilisateur
      */
     public void afficherRegles() {
-        System.out.println("Jeu n° " + typeJeu + " en mode " + modeJeu);
+//        System.out.println("Jeu n° " + typeJeu + " en mode " + modeJeu);
+        System.out.println("Règles du jeu :");
         System.out.println(ParametresDuJeu.NB_MAX_ESSAIS + " essais pour trouver un code secret de " + ParametresDuJeu.LONGUEUR_CODE_SECRET + " chiffres.");
         System.out.println("Les chiffres possibles vont de 0 à " + (ParametresDuJeu.NB_MAX_SYMBOLES-1) + ".");
+        System.out.println("Les doublons sont autorisés.");
     }
 }

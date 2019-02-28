@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Joueur Ordinateur qui joue contre le joueur l'humain
+ * Il peut avoir les rôles codeur et/ou décodeur
+ */
 public class JoueurOrdi extends Joueur {
     //    char[] symboles = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};  //Utilisable si volonté d'avoir des symboles autres que 0, 1, 2...)
     private ArrayList<String> tabSolution = new ArrayList<>();
@@ -16,6 +20,8 @@ public class JoueurOrdi extends Joueur {
     private List<Integer> anciennesEvaluations = new ArrayList<>();  // et leur évaluation associée
 
     private static Logger logger = Logger.getLogger(Main.class);
+
+
 
     public void setPropositionPrecedente(String propositionPrecedente) {
         this.propositionPrecedente = propositionPrecedente;
@@ -97,6 +103,9 @@ public class JoueurOrdi extends Joueur {
             nouvelleProposition = genererPropositionAleatoirement();
         }else{
             anciennesEvaluations.add(evaluation);
+            logger.trace("JoueurOrdi] Proposition (int). evaluation=" + evaluation + ". Taille tab anciennesPropositions = "
+                    + anciennesPropositions.size() + " Taille tab anciennesEvaluations=" + anciennesEvaluations.size());
+
             int i = 0; //index du tableau des solutions tabSolution
             boolean trouve;
             do {
@@ -108,13 +117,13 @@ public class JoueurOrdi extends Joueur {
                     if (evaluerProposition(tabSolution.get(i), anciennesPropositions.get(j)) != anciennesEvaluations.get(j)) {
                             trouve = false;
                     }
-                    i++; //tabSolution suivant
                 }
+                i++; //tabSolution suivant
             }while (!trouve); // tant qu'on a pas trouvé une proposition répondant aux critères
             logger.trace("[JoueurOrdi] Proposition (int). nouvelle propal=" + tabSolution.get(i-1));
             nouvelleProposition =tabSolution.get(i-1);
         }
-        logger.debug("[JoueurOrdi] proposition (int) avec en sortie " + evaluation + '.');
+        logger.debug("[JoueurOrdi] proposition (int) avec en sortie evaluatiion=" + evaluation + '.');
         System.out.println("proposition : " + nouvelleProposition);
         anciennesPropositions.add(nouvelleProposition);
         return nouvelleProposition;
@@ -150,7 +159,6 @@ public class JoueurOrdi extends Joueur {
                 b += m;
             }
         }
-        anciennesEvaluations.add(10 * r + b);
         return 10 * r + b;
     }
 

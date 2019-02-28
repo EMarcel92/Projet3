@@ -1,15 +1,9 @@
 package manu.tuto;
 
+/**
+ *
+ */
 public interface Partie {
-
-    /**
-     * Méthode utilisée au démarrage d'une partie pour
-     * <ul>
-     *     <li>Générer un code secret</li>
-     *     <li>Initialiser l'ensemble des solution possibles</li>
-     * </ul>
-     */
-  //  void initialiserUnePartie(Codeur codeur, Decodeur decodeur);
 
     /**
      * Méthode gérant l'initialisation de la partie et la séquence des tours jusqu'à la fin de la partie
@@ -20,4 +14,8 @@ public interface Partie {
      */
     void jouerUnePartie();
 
+    /**
+     * Mode de jeu spécifique permettant de réaliser 2 parties en parallèle
+     */
+    void JouerUnDuel() ;
 }
