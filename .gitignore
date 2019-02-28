@@ -1,2 +1,10 @@
 .idea
 mastermind.iml
+target/classes/
+target/generated-sources
+target/generated-test-sources
+target/javadoc-bundle-options
+target/maven-archiver
+target/maven-status
+target/surefire-reports
+target/test-classes
