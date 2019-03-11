@@ -1,6 +1,7 @@
 package manu.tuto;
 
 import org.apache.log4j.Logger;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -23,10 +24,10 @@ public class Jeu {
     private final int DUEL = 3;
     Scanner sc ;
     private boolean reponseFausse ;  //peut-on déclarer ici pour utiliser dans plusieurs méthodes ??
-    Joueur joueurHumain ; // Déclaration d'un joueur humain(classe abstraite)
-    Joueur joueurOrdi ;// Idem pour le Joueur Ordinateur
-    Joueur joueurHumain2 ; // Déclaration d'un joueur humain(classe abstraite)
-    Joueur joueurOrdi2 ;// Idem pour le Joueur Ordinateur
+    Joueur joueurHumain; // Déclaration d'un joueur humain(classe abstraite)
+    Joueur joueurOrdi;// Idem pour le Joueur Ordinateur
+    Joueur joueurHumain2 ; // Déclaration d'un 2e joueur humain(classe abstraite)
+    Joueur joueurOrdi2 ;// Idem pour le 2e Joueur Ordinateur
 
     private static Logger logger = Logger.getLogger(Main.class);
 
@@ -35,14 +36,16 @@ public class Jeu {
         this.reponseFausse = true;
     }
 
-
     /**
      * Lanceur du jeu (logiciel) : détermination de la partie (type et mode de jeu) à exécuter
      */
     public void lancerLeJeu(){
+       // ParametresDuJeu parametresDuJeu = new ParametresDuJeu();
         logger.debug("[Jeu] lancerLeJeu");
         //Intialisation des paramètres des jeux (fichier de paramétrage)
-        ParametresDuJeu.intialiserLesParametres();
+        ParametresDuJeu parametresDuJeu = new ParametresDuJeu();
+
+        parametresDuJeu.intialiserLesParametres();
         bienvenue();   //Affichage d'un message d'accueil
         int choix = 2; //Choix de jouer à un "autre jeu" provoquant l'affichage des menus de sélection d'un jeu
         do {  //tant que le joueur veut continuer à jouer
@@ -93,9 +96,10 @@ public class Jeu {
      * Lance et déroule une partie (PlusMoins ou Mastermind) en fonction des choix précédents de l'utilisateur
      */
     public void lancerUnePartie(){
-        //instanciation des joueurs (réinit des variables si plusieurs parties jouées à la suite
+        //instanciation des joueurs (réinit des variables si plusieurs parties jouées à la suite)
+        joueurOrdi = new JoueurOrdi();
         this.joueurHumain = new JoueurHumain();
-        this.joueurOrdi = new JoueurOrdi();
+
         switch (typeJeu) {
             case PLUSMOINS:
                 PlusMoins plusMoins;
@@ -112,7 +116,7 @@ public class Jeu {
                         joueurHumain2=new JoueurHumain();
                         joueurOrdi2 = new JoueurOrdi ();
                         plusMoins = new PlusMoins(joueurHumain, joueurOrdi, joueurOrdi2, joueurHumain2);
-                        plusMoins.JouerUnDuel();
+                        plusMoins.jouerUnDuel();
                         break;
                     default:
                         System.out.println("Le mode souhaité n'existe pas.");

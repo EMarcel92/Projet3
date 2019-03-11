@@ -13,25 +13,16 @@ public class Main {
 
     public static void main(String[] args) {
 
-        logger.debug("[Main] Démarrage de Main");
+        logger.debug("Main: Démarrage de Main");
 
         for( String param : args ) {
-            logger.debug("[Main] Paramètre Args=" + param + '.');
-            if (param == "modedev"){
+            logger.debug("Main: Paramètre Args=" + param + '.');
+            if (param.equals("modedev")){
                 ParametresDuJeu.MODE_DEV = true ;
-
                 logger.debug("Main : MODEDEV est à true");
             }
         }
         Jeu jeu = new Jeu();
         jeu.lancerLeJeu();
     }
-
-
-
-
-
-
-
-
 }

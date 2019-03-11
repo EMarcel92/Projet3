@@ -8,11 +8,12 @@ class ParametresDuJeuTest {
 
     @Test
     void intialiserLesParametresTest() {
-        ParametresDuJeu.intialiserLesParametres();
+        ParametresDuJeu parametresDuJeu = new ParametresDuJeu();
+        parametresDuJeu.intialiserLesParametres();
         assertEquals(4,ParametresDuJeu.LONGUEUR_CODE_SECRET);
-        assertEquals(10,ParametresDuJeu.NB_MAX_ESSAIS);
+        assertEquals(12,ParametresDuJeu.NB_MAX_ESSAIS);
         assertEquals(6,ParametresDuJeu.NB_MAX_SYMBOLES);
-        assertTrue(ParametresDuJeu.MODE_DEV);
+        assertFalse(ParametresDuJeu.MODE_DEV);
 
     }
 }

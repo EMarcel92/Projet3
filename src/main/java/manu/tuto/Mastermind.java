@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 /**
  * Mastremind déroule une pertie de Mastermind
  */
-public class Mastermind { //implements Partie{
+public class Mastermind implements Partie{
     private Joueur challenger;
     private Joueur defenseur;
     private String codeSecret;

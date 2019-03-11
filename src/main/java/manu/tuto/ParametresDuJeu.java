@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ParametresDuJeu {
@@ -18,14 +19,20 @@ public class ParametresDuJeu {
     /**
      * Récupère les paramètres du jeu à partir d'un fichier de paramètres (config.properties)
      */
-    public static void intialiserLesParametres(){
+    public  void intialiserLesParametres(){
+        Properties prop = new Properties();
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream input = null;
+
         try{
             // chargement des propriétés
-            Properties prop = lireFichierParametres("C:\\Users\\S061980\\IdeaProjects\\mastermind\\src\\main\\resources\\config.properties");
-            String longueurCodeSecret = prop.getProperty("longueurCodeSecret","4");
-            String nbMaxSymboles = prop.getProperty("nbMaxSymboles","6");
-            String nbMaxEssais = prop.getProperty("nbMaxEssais","12");
-            String modedev = prop.getProperty("modedev","true");
+//            Properties prop = lireFichierParametres("C:\\Users\\S061980\\IdeaProjects\\mastermind\\src\\main\\resources\\config.properties");
+            input = classLoader.getResourceAsStream("config.properties");
+            prop.load(input);
+            String longueurCodeSecret = prop.getProperty("longueurCodeSecret");
+            String nbMaxSymboles = prop.getProperty("nbMaxSymboles");
+            String nbMaxEssais = prop.getProperty("nbMaxEssais");
+            String modedev = prop.getProperty("modedev");
             logger.debug("[ParametresuJeu] Paramètres récupérés du fichier=" + longueurCodeSecret + "," + nbMaxSymboles + "," + nbMaxEssais + "," + modedev);
 
             LONGUEUR_CODE_SECRET = longueurCodeSecretValide(longueurCodeSecret);
@@ -34,10 +41,11 @@ public class ParametresDuJeu {
             if (MODE_DEV != true){  // S'il est à true, c'est qu'il a été initialisé par l'argument à l'appel du Main
                 MODE_DEV = modeDevValide(modedev);
             }
-            logger.debug("Paramètres validés=" + LONGUEUR_CODE_SECRET + "," + NB_MAX_SYMBOLES + "," + NB_MAX_ESSAIS + "," + MODE_DEV);
+            logger.debug("[ParametresuJeu] Paramètres validés=" + LONGUEUR_CODE_SECRET + "," + NB_MAX_SYMBOLES + "," + NB_MAX_ESSAIS + "," + MODE_DEV);
         }
         catch(Exception e){
-            System.out.println("Exception: " + e);
+            logger.fatal("[ParametresuJeu] problème d'accès au fichier de paramétrage : " + e + '.');
+            System.out.println("Impossible d'ouvrir le fichier de paramètres. Exception : " + e);
         }
     }
 
@@ -100,7 +108,7 @@ public class ParametresDuJeu {
         Boolean modedevBooleen = true;
         try {
             modedevBooleen = new Boolean(modeDev);
-            System.out.println("Nombre d'essais maximum = " + modedevBooleen.toString());
+            System.out.println("Mode développeur= " + modedevBooleen.toString());
         }catch (NumberFormatException e){
             System.out.println("exception : " + e);
             System.out.println("Le paramètre mode développeur est incorrect (true/false) : " + modeDev);

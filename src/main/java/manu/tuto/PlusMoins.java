@@ -62,7 +62,7 @@ public class PlusMoins implements Partie {
     }
 
     @Override
-    public void JouerUnDuel() {
+    public void jouerUnDuel() {
         String evaluation = null;
         String proposition = null;
         String evaluation2 = null;

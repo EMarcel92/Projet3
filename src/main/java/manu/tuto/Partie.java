@@ -17,5 +17,5 @@ public interface Partie {
     /**
      * Mode de jeu spécifique permettant de réaliser 2 parties en parallèle
      */
-    void JouerUnDuel() ;
+    void jouerUnDuel() ;
 }
